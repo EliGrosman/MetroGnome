@@ -9,13 +9,17 @@ x, sr = librosa.load(wav)
 # Calculate tempo and array of beats from input file
 tempo, beats = librosa.beat.beat_track(y = x, sr = sr)
 
+# Set parameters
+click_freq = 1200
+click_duration = 0.5
+
 # Generate the clicktrack
 x_beats = librosa.clicks(
-            frames = beats,      # the beats to place clicks
-            sr = sr,             # sample rate
-            length = len(x),     # length of the song (necessary to align clicktrack and song)
-            click_freq = 1200,   # frequency of each click (in Hz)
-            click_duration = 0.5 # duration of each click (in seconds)
+            frames = beats, # the beats to place clicks
+            sr = sr, # sample rate
+            length = len(x), # length of the song (necessary to align clicktrack and song)
+            click_freq = click_freq, # frequency of each click (in Hz)
+            click_duration = click_duration # duration of each click (in seconds)
           )
 
 # Adjust the volume. vol_adj is in decibles
