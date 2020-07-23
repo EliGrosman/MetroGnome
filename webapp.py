@@ -1,4 +1,4 @@
-#!flask/Scripts/python
+#!flask/bin/python
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
@@ -83,5 +83,4 @@ def uploaded_file(filename):
   return send_from_directory(app.config['CONVERT_FOLDER'],
                             filename)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app.run(host = "0.0.0.0")
