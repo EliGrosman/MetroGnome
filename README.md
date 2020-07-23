@@ -3,6 +3,8 @@
 A tool which detects beats in a song and plays a metronome in sync with the
 recording of the song.
 
+A working demo may be found at http://server.triangleuw.com:5000
+
 ## Background
 
 One of the most popular tools for practicing music is a metronome but sometimes
