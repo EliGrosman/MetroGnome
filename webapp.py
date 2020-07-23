@@ -65,7 +65,7 @@ def upload_file():
     <title>Generate Clicktrack</title>
     <h1>Generate Clicktrack</h1>
     <form method=post enctype=multipart/form-data>
-      <label for=file>Upload file</label><br>
+      <label for=file>Upload file (only accepts .wav)</label><br>
       <input type=file id=file name="file"><br>
       <label for=freq>Click frequency (in db)</label><br>
       <input type=number id=freq name=freq placeholder="880"><br>
@@ -77,6 +77,10 @@ def upload_file():
       <input type=range id=vol_click name="vol_click"><br>
       <input type=submit value=Upload>
     </form>
+    <br>
+    <h3>Demos</h3>
+    <a href="/uploads/dmv.wav">DMV - Primus</a><br>
+    <a href="/uploads/another_one_bites_the_dust.wav">Another One Bites the Dust - Queen</a>
     '''
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
