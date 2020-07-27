@@ -1,12 +1,13 @@
-#!flask/bin/python
+#!flask/Scripts/python
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 import librosa
+from librosa_beat import beat_track
 
 UPLOAD_FOLDER = './upload/'
 CONVERT_FOLDER = './convert/'
-ALLOWED_EXTENSIONS = {'wav'}
+ALLOWED_EXTENSIONS = {'wav', 'mp3'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -20,7 +21,7 @@ def generate_click(filename, click_freq, click_duration, vol_adj_song, vol_adj_c
   file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
   x, sr = librosa.load(file_path)
 
-  tempo, beats = librosa.beat.beat_track(y = x, sr = sr)
+  tempo, beats = beat_track(y = x, sr = sr)
 
   x_beats = librosa.clicks(
             frames = beats, # the beats to place clicks
@@ -65,7 +66,7 @@ def upload_file():
     <title>Generate Clicktrack</title>
     <h1>Generate Clicktrack</h1>
     <form method=post enctype=multipart/form-data>
-      <label for=file>Upload file (only accepts .wav)</label><br>
+      <label for=file>Upload file (Accepts .wav, .mp3)</label><br>
       <input type=file id=file name="file"><br>
       <label for=freq>Click frequency (in db)</label><br>
       <input type=number id=freq name=freq placeholder="880"><br>
@@ -81,6 +82,7 @@ def upload_file():
     <h3>Demos</h3>
     <a href="/uploads/dmv.wav">DMV - Primus</a><br>
     <a href="/uploads/another_one_bites_the_dust.wav">Another One Bites the Dust - Queen</a>
+    <a href="/uploads/ANTEMASQUE_4AM.mp3">4AM - ANTEMASQUE (detected beats on 2 and 4)</a>
     '''
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
