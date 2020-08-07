@@ -1,0 +1,21 @@
+<!doctype html>
+    <title>Generate Clicktrack</title>
+    <h1>Generate Clicktrack</h1>
+    <form method=post enctype=multipart/form-data>
+      <label for=file>Upload file (Accepts .wav, .mp3)</label><br>
+      <input type=file id=file name="file"><br>
+      <label for=freq>Click frequency (in db)</label><br>
+      <input type=number id=freq name=freq placeholder="880"><br>
+      <label for=duration>Click duration (in seconds)</label><br>
+      <input type=number id=duration name=duration placeholder="0.50" step ="0.01" min=0 max=5><br>
+      <label for=vol_song>Song volume</label><br>
+      <input type=range id=vol_song name=vol_song><br>
+      <label for=vol_click>Click volume</label><br>
+      <input type=range id=vol_click name="vol_click"><br>
+      <input type=submit value=Upload>
+    </form>
+    <br>
+    <h3>Demos</h3>
+    <a href="/uploads/dmv.wav">DMV - Primus</a><br>
+    <a href="/uploads/another_one_bites_the_dust.wav">Another One Bites the Dust - Queen</a><br>
+    <a href="/uploads/ANTEMASQUE_4AM.mp3">4AM - ANTEMASQUE (detected beats on 2 and 4)</a>
