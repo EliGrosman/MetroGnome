@@ -2,3 +2,4 @@
 /convert/*
 /upload/*
 /flask
+/__pycache__
