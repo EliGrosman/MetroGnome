@@ -29,7 +29,12 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
   return filename
 
 def generate_beats(file):
-  inputAudio, sr = load(file)
+
+  # Converted files are saved to /upload/ so we load them from their path
+  if(isinstance(file, str)):
+    inputAudio, sr = load("./upload/" + file)
+  else:
+    inputAudio, sr = load(file)
 
   _, beats = beat_track(y = inputAudio, sr = sr)
 
