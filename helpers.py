@@ -35,7 +35,7 @@ def generate_beats(file):
 
   return(inputAudio, sr, beats)
 
-def convert_mp3(file, upload_folder):
+def convert_mp3(file, filename, upload_folder):
   audio = AudioSegment.from_mp3(file)
   newPath = os.path.join(upload_folder, filename + ".wav")
   audio.export(newPath, format="wav")
