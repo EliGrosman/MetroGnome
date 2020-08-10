@@ -2,7 +2,7 @@
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template
 from werkzeug.utils import secure_filename
-from helpers import allowed_file, generate_click, generate_beats
+from helpers import allowed_file, generate_click, generate_beats, convert_mp3
 import json
 
 UPLOAD_FOLDER = './upload/'
@@ -27,6 +27,8 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            if(filename.rsplit('.', 1)[1].lower() == "mp3"):
+              file = convert_mp3(file)
             freq = float(request.form['freq'])
             duration = float(request.form['duration'])
             vol_song = (int(request.form['vol_song'])-50)/10

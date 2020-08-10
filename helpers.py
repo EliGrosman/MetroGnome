@@ -1,7 +1,8 @@
 import os
 from librosa import clicks, load
 from librosa.beat import beat_track
-from librosa.output import write_wav
+import soundfile as sf
+from pydub import AudioSegment
 
 ALLOWED_EXTENSIONS = {'wav', 'mp3'}
 
@@ -24,7 +25,7 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
   x = x + vol_adj_song
   x_beats = x_beats + vol_adj_click 
 
-  write_wav(os.path.join(convert_folder, filename), x + x_beats, sr = sr)
+  sf.write(os.path.join(convert_folder, filename), x + x_beats, sr)
   return filename
 
 def generate_beats(file):
@@ -33,3 +34,6 @@ def generate_beats(file):
   _, beats = beat_track(y = inputAudio, sr = sr)
 
   return(inputAudio, sr, beats)
+
+def convert_mp3(file)
+  return(AudioSegment.from_mp3(file))
