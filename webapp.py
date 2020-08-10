@@ -28,7 +28,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             if(filename.rsplit('.', 1)[1].lower() == "mp3"):
-              filename = convert_mp3(file)
+              filename = convert_mp3(file, UPLOAD_FOLDER)
               file = filename
             freq = float(request.form['freq'])
             duration = float(request.form['duration'])
