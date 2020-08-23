@@ -13,9 +13,9 @@ def allowed_file(filename):
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
   
-  inputAudio, sr = convert_file(file, convert_folder)
-  x, beats = generate_beats(inputAudio, sr)
-
+  inputAudio, sr = convert_file(file, filename, convert_folder)
+  _, beats = generate_beats(inputAudio, sr)
+  x = inputAudio
   x_beats = clicks(
             frames = beats, # the beats to place clicks
             sr = sr, # sample rate
@@ -24,11 +24,12 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
             click_duration = click_duration # duration of each click (in seconds)
           )
 
-  x = x + vol_adj_song
-  x_beats = x_beats + vol_adj_click 
+  x *= vol_adj_song
+  x_beats *= vol_adj_click 
 
-  sf.write(os.path.join(convert_folder, filename), x + x_beats, sr)
-  return filename
+  newName = filename.rsplit('.', 1)[0].lower() + ".wav"
+  sf.write(os.path.join(convert_folder, newName), x + x_beats, sr)
+  return newName
 
 def generate_beats(file, sr):
 
@@ -50,4 +51,6 @@ def convert_file(file, filename, convert_folder):
   # Converts to mono to keep file small
   if len(data.shape) == 2:
     data = data.sum(axis=1) / 2
+  # data = data / np.max(np.abs(data)) 
+  
   return(data, sr)

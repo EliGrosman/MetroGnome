@@ -1,4 +1,4 @@
-#!flask/Scripts/python
+#!flask/bin/python
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template
 from werkzeug.utils import secure_filename
