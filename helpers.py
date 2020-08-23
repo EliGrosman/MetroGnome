@@ -31,7 +31,7 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
   sf.write(os.path.join(convert_folder, newName), x + x_beats, sr)
   return newName
 
-def generate_beats(file, sr):
+def generate_beats(inputAudio, sr):
 
   _, beats = beat_track(y = inputAudio, sr = sr)
 
