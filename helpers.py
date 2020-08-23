@@ -4,6 +4,7 @@ from librosa.beat import beat_track
 import soundfile as sf
 from pydub import AudioSegment
 from scipy.io import wavfile as wav
+import numpy as np
 
 ALLOWED_EXTENSIONS = {'wav', 'mp3'}
 
