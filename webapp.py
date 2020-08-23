@@ -66,8 +66,8 @@ def generate():
     return render_template("noAudioFile.html"), 400
   file = request.files['audioFile']
   if file and allowed_file(file.filename):
-    converted = convert_file(file, file.filename, app.config['CONVERT_FOLDER'])
-    _, sr, beats = generate_beats(converted)
+    converted, sr = convert_file(file, file.filename, app.config['CONVERT_FOLDER'])
+    _, beats = generate_beats(converted, sr)
     ret = {
       "converted": converted.tolist(),
       "beats": beats.tolist(),
