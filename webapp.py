@@ -2,7 +2,7 @@
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template
 from werkzeug.utils import secure_filename
-from helpers import allowed_file, generate_click, generate_beats, convert_mp3
+from helpers import allowed_file, generate_click, generate_beats, convert_mp3, convert_file
 import json
 
 UPLOAD_FOLDER = './upload/'
@@ -45,14 +45,31 @@ def uploaded_file(filename):
                             filename)
 
 
-@app.route('/generate', methods = ['POST'])
-def generate():
+@app.route('/generatebeats', methods = ['POST'])
+def generateBeats():
   if 'audioFile' not in request.files:
     return render_template('noAudioFile.html'), 400
   file = request.files['audioFile']
   if file and allowed_file(file.filename):
     _, sr, beats = generate_beats(file)
     ret = {
+      "beats": beats.tolist(),
+      "sr": sr
+    }
+    return ret
+  else:
+    return render_template('badFileType.html'), 400
+
+@app.route('/generate', methods = ['POST'])
+def generate():
+  if 'audioFile' not in request.files:
+    return render_template("noAudioFile.html"), 400
+  file = request.files['audioFile']
+  if file and allowed_file(file.filename):
+    _, sr, beats = generate_beats(file)
+    converted = convert_file(file)
+    ret = {
+      "converted": converted.tolist(),
       "beats": beats.tolist(),
       "sr": sr
     }

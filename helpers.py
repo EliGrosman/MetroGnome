@@ -45,3 +45,14 @@ def convert_mp3(file, filename, upload_folder):
   newName = filename + ".wav"
   audio.export(os.path.join(upload_folder, newName), format="wav")
   return(newName)
+
+
+def convert_file(file, filename):
+  extension = filename.rsplit('.', 1)[1].lower()
+  switcher = {
+    "mp3": AudioSegment.from_mp3(file),
+    "wav": AudioSegment.frm_wav(file)
+  }
+  audio = switcher.get(extension)
+
+  audio.export(os.path.join(convert_folder, newName), format = "wav", bitrate = '16k')
