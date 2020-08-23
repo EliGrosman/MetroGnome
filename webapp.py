@@ -31,8 +31,8 @@ def upload_file():
             duration = float(request.form['duration'])
             vol_song = (int(request.form['vol_song'])-50)/10
             vol_click = (int(request.form['vol_click'])-50)/10
-            generate_click(file, filename, freq, duration, vol_song, vol_click, app.config['CONVERT_FOLDER'])
-            return redirect(url_for('uploaded_file', filename=filename))
+            retFile = generate_click(file, filename, freq, duration, vol_song, vol_click, app.config['CONVERT_FOLDER'])
+            return redirect(url_for('uploaded_file', filename = retFile))
     return render_template('home.html')
 
 

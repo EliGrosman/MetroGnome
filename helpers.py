@@ -51,6 +51,6 @@ def convert_file(file, filename, convert_folder):
   # Converts to mono to keep file small
   if len(data.shape) == 2:
     data = data.sum(axis=1) / 2
-  # data = data / np.max(np.abs(data)) 
+  data = data / np.max(np.abs(data)) 
   
   return(data, sr)
