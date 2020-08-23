@@ -53,7 +53,7 @@ def convert_file(file, filename, convert_folder):
   extension = filename.rsplit('.', 1)[1].lower()
   if(extension == "mp3"):
     audio = AudioSegment.from_mp3(file)
-  else if(extension == "wav"):
+  elif(extension == "wav"):
     audio = AudioSegment.from_wav(file)
   else:
     print("broken")
