@@ -40,7 +40,7 @@ def generate_beats(file, sr):
 
   _, beats = beat_track(y = inputAudio, sr = sr)
 
-  return(inputAudio, sr, beats)
+  return(inputAudio, beats)
 
 def convert_mp3(file, filename, upload_folder):
   audio = AudioSegment.from_mp3(file)
@@ -60,6 +60,7 @@ def convert_file(file, filename, convert_folder):
   newName = filename + ".wav"
   audio.export(os.path.join(convert_folder, newName), format = "wav", bitrate = '16k')
   sr, data = wav.read(os.path.join(convert_folder, newName))
+  # Converts to mono to keep file small
   if len(data.shape) == 2:
     data = data.sum(axis=1) / 2
-  return data, sr
+  return(data, sr)
