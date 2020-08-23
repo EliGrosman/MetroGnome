@@ -2,7 +2,7 @@
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template
 from werkzeug.utils import secure_filename
-from helpers import allowed_file, generate_click, generate_beats, convert_mp3, convert_file
+from helpers import allowed_file, generate_click, generate_beats, convert_file
 import json
 
 UPLOAD_FOLDER = './upload/'

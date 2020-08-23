@@ -13,7 +13,7 @@ def allowed_file(filename):
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
   
-  inputAudio, sr = convert_file(file)
+  inputAudio, sr = convert_file(file, convert_folder)
   x, beats = generate_beats(inputAudio, sr)
 
   x_beats = clicks(
