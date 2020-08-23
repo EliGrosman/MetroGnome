@@ -13,8 +13,8 @@ def allowed_file(filename):
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
   
-  inputAudio = convert_file(file)
-  x, sr, beats = generate_beats(inputAudio, 0)
+  inputAudio, sr = convert_file(file)
+  x, beats = generate_beats(inputAudio, sr)
 
   x_beats = clicks(
             frames = beats, # the beats to place clicks
@@ -32,22 +32,9 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
 
 def generate_beats(file, sr):
 
-  # Converted files are saved to /upload/ so we load them from their path
-  if(isinstance(file, str)):
-    inputAudio, sr = load("./upload/" + file)
-  else:
-    inputAudio = file
-
   _, beats = beat_track(y = inputAudio, sr = sr)
 
   return(inputAudio, beats)
-
-def convert_mp3(file, filename, upload_folder):
-  audio = AudioSegment.from_mp3(file)
-  newName = filename + ".wav"
-  audio.export(os.path.join(upload_folder, newName), format="wav")
-  return(newName)
-
 
 def convert_file(file, filename, convert_folder):
   extension = filename.rsplit('.', 1)[1].lower()

@@ -27,9 +27,6 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            if(filename.rsplit('.', 1)[1].lower() == "mp3"):
-              filename = convert_mp3(file, filename, UPLOAD_FOLDER)
-              file = filename
             freq = float(request.form['freq'])
             duration = float(request.form['duration'])
             vol_song = (int(request.form['vol_song'])-50)/10
@@ -43,22 +40,6 @@ def upload_file():
 def uploaded_file(filename):
   return send_from_directory(app.config['CONVERT_FOLDER'],
                             filename)
-
-
-@app.route('/generatebeats', methods = ['POST'])
-def generateBeats():
-  if 'audioFile' not in request.files:
-    return render_template('noAudioFile.html'), 400
-  file = request.files['audioFile']
-  if file and allowed_file(file.filename):
-    _, sr, beats = generate_beats(file)
-    ret = {
-      "beats": beats.tolist(),
-      "sr": sr
-    }
-    return ret
-  else:
-    return render_template('badFileType.html'), 400
 
 @app.route('/generate', methods = ['POST'])
 def generate():
