@@ -1,4 +1,4 @@
-# Clicktrack Generator
+# MetroGnome
 
 A tool which detects beats in a song and plays a metronome in sync with the
 recording of the song.
@@ -18,9 +18,9 @@ and a fully customizable metronome at the same time.
 
 ## Planned Features
 - [x] Create working demo.
-- [ ] Brainstorm better title.
-- [ ] Add functionality for other audio file extensions.
-- [ ] Create stable backend application.
+- [x] Brainstorm better title.
+- [x] Add functionality for other audio file extensions.
+- [x] Create stable backend application.
 - [ ] Create mobile app to interface with the backend.
 - [ ] Add more customizability to the metronome (different click sounds).
 - [ ] Rework algorithm to detect beats better in more complicated songs.
