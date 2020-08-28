@@ -14,7 +14,7 @@ def allowed_file(filename):
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
   
-  inputAudio, sr = convert_file(file, filename, convert_folder)
+  inputAudio, sr, newName = convert_file(file, filename, convert_folder)
   _, beats = generate_beats(inputAudio, sr)
   x = inputAudio
   x_beats = clicks(
@@ -28,7 +28,6 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
   x *= vol_adj_song
   x_beats *= vol_adj_click 
 
-  newName = filename.rsplit('.', 1)[0].lower() + ".wav"
   sf.write(os.path.join(convert_folder, newName), x + x_beats, sr)
   return newName
 
