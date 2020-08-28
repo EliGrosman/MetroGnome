@@ -46,7 +46,7 @@ def convert_file(file, filename, convert_folder):
     audio = AudioSegment.from_wav(file)
   else:
     print("broken")
-  newName = filename + ".wav"
+  newName = filename + "_CONVERTED.wav"
   audio.export(os.path.join(convert_folder, newName), format = "wav", bitrate = '16k')
   sr, data = wav.read(os.path.join(convert_folder, newName))
   # Converts to mono to keep file small
@@ -54,4 +54,4 @@ def convert_file(file, filename, convert_folder):
     data = data.sum(axis=1) / 2
   data = data / np.max(np.abs(data)) 
   
-  return(data, sr)
+  return(data, sr, newName)

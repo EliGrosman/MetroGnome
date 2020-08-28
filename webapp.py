@@ -1,6 +1,6 @@
 #!flask/bin/python
 import os
-from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template
+from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template, make_response, send_file
 from werkzeug.utils import secure_filename
 from helpers import allowed_file, generate_click, generate_beats, convert_file
 import json
@@ -47,14 +47,15 @@ def generate():
     return render_template("noAudioFile.html"), 400
   file = request.files['audioFile']
   if file and allowed_file(file.filename):
-    converted, sr = convert_file(file, file.filename, app.config['CONVERT_FOLDER'])
+    converted, sr, newName = convert_file(file, file.filename, app.config['CONVERT_FOLDER'])
     _, beats = generate_beats(converted, sr)
     ret = {
-      "converted": converted.tolist(),
       "beats": beats.tolist(),
-      "sr": sr
+      "sr": sr,
     }
-    return ret
+    response = make_response(send_file(os.path.join(app.config['CONVERT_FOLDER'], newName), attachment_filename = "converted.wav", as_attachment = True))
+    response.headers['X-Beats'] = ret
+    return response, 200
   else:
     return render_template('badFileType.html'), 400
 
