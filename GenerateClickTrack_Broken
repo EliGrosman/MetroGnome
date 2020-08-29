@@ -25,18 +25,17 @@ public class GenerateClickTrack {
 	*	We take a "times" array, which is an array of times to place clicks.
 	*/
 	
-	public static float[] GenerateLogSpace(int min, int max, int logBins, double logarithmicBase) {
+	public void generateLogSpace(int min, int max, int logBins, double logarithmicBase) {
 	       //double logarithmicBase = Math.E; -base of e default. Enable this 
 	       double logMin = Math.log(min);
 	       double logMax = Math.log(max);
 	       double delta = (logMax - logMin) / logBins;
 	       double deltaTot = 0;
-	       float [] spacedVals = new float[logBins];
+	       spacedVals = new float[logBins];
 	       for (int i = 0; i <= logBins; ++i) {
 	           spacedVals[i] = (float) Math.pow(logarithmicBase, logMin + deltaTot);
 	           deltaTot += delta;
-	       }	       
-	       return spacedVals;
+	       }
 	}
 	
 	// Modifies the spacedVals field. Multiplies indices in spacedVals by itself and a sine function to create the click sound waveform
@@ -67,9 +66,9 @@ public class GenerateClickTrack {
 	// Returns an ArrayList of clicks. (unsure: there are no blank zero spaces in my ArrayList.
 	// I am unsure as to how the clicktrack is read - right now the newPositions ArrayList is just
 	// a bunch of click values 
-	public ArrayList<Float> placeClicks (int[] clicks) {
+	public ArrayList<Float> placeClicks() {
 		
-		int[] positions = timeToSamples();				
+		int[] positions = timeToSamples();	//using default 22050. change if using 11025.			
 		ArrayList<Float> newPositions = new ArrayList<Float>(); // Click signal array 	
 		int sentinel = positions.length;
 		
@@ -89,4 +88,30 @@ public class GenerateClickTrack {
 		}
 		return newPositions;
 	}
+}
+
+------------------------------------------------------------------------------------------------------------------
+import java.util.ArrayList;
+public class TestProgram {
+	
+	public static void main(String[] args) {
+		
+		int[] timesParam = {4, 199, 205, 300, 403, 604};
+		
+		//Call timesToSamples here??
+		
+		float sr = 11025; 
+		int hop_length = 5; //substitute value
+		float click_freq = 3; //substitute value
+				
+		GenerateClickTrack ct = new GenerateClickTrack(sr, hop_length, click_freq, (float) 0.5, timesParam);
+	
+		ct.generateLogSpace(0, -10, 11025, 2.0);
+		
+		ct.arange();
+		
+		ArrayList<Float> clickTrack = ct.placeClicks();
+		//clickTrack is our completed click track.
+	}
+	
 }
