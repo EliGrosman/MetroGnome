@@ -78,19 +78,17 @@ public class GenerateClickTrack {
 			
 			int end = i + spacedVals.length;
 			
-			/ *
-			* Here is my issue. Python: t = [11, 22, 33, 44, 55, 66]
-			*			    s = [1, 2, 3, 4, 5, 6]
-			* t[0:] += s (or the equivalent t += s or t[0:] += s[:6])
-			* t is now: [11, 22, 33, 44, 55, 66, 1, 2, 3, 4, 5, 6]. This doesn't make sense ot me in terms of our newPositions and spacedVals arrays.
-			* /
 			if (end >= spacedVals.length) {
-				//newPositions from [i:] (whole array) gets click[: length - i] concatenated to it
-				//newPositions[i]
-			} else {
-				//newPositions from start to end gets spacedVals added to it, indices corresponded.
-				for (int j = 0; j < newPositions.size(); j++) {
-					newPositions.add(j, spacedVals[j]);
+				
+				//placing a click but just shortened to fit length
+				for (int k = 0; k < spacedVals.length - i; k++) {
+					newPositions.add(spacedVals[k]);
+				}
+			} else {				
+				//appending clicks onto the click signal newPositions			
+				//This is not correct. END is END. add AFTER END . DO WE NEED TO MAKE newPOSITIONS and ARRAY OF ZEROS? no. 
+				for (int k = 0; k < spacedVals.length; k++) {
+					newPositions.add(spacedVals[k]);
 				}
 			}			
 		}
