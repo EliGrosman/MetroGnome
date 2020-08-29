@@ -22,6 +22,7 @@ public class GenerateClickTrack {
 	/*
 	*	The following methods are to create a default click signal.
 	*	There is no current functionality for a custom given click signal
+	*	We take a "times" array, which is an array of times to place clicks.
 	*/
 	
 	//TODO: modify this for different bases. (?)
@@ -64,29 +65,29 @@ public class GenerateClickTrack {
 		return times;
 	}
 	
-  // This method is not functional
-	public int[] placeClicks (int[] clicks) {
+	public ArrayList<Float> placeClicks (int[] clicks) {
 		int[] positions = timeToSamples();
 		
 		//find max of primitive array
-		int maxVal = Arrays.stream(positions).max().getAsInt();
-				
-		//int length = maxVal + 1; //1 is representative of click.shape[0]??
-		int length = times.length; 
+		//int maxVal = Arrays.stream(positions).max().getAsInt();
 		
-		//TODO: do we have to filter out positions past the length boundary? 
-		ArrayList<Integer> newPositions = new ArrayList<Integer>();
+		ArrayList<Float> newPositions = new ArrayList<Float>(); //click_signal
 		
 		int sentinel = positions.length;
 		for (int i = 0; i < sentinel; i++) {
 			
-			// if click is an optional array, end = i + click.shape[0] is equal to end = i?
+			int end = i + spacedVals.length;
 			
-			if (positions[sentinel] < length) {
-				newPositions.add(positions[sentinel]); //reverse the order of newPositions
-			}
-			Collections.reverse(newPositions);
+			if (end >= spacedVals.length) {
+				//newPositions from [i:] (whole array) gets click[: length - i] concatenated to it
+				//newPositions[i]
+			} else {
+				//newPositions from start to end gets spacedVals added to it, indices corresponded.
+				for (int j = 0; j < newPositions.size(); j++) {
+					newPositions.add(j, spacedVals[j]);
+				}
+			}			
 		}
-		return ___ 
+		return newPositions;
 	}
 }
