@@ -25,9 +25,8 @@ public class GenerateClickTrack {
 	*	We take a "times" array, which is an array of times to place clicks.
 	*/
 	
-	//TODO: modify this for different bases. (?)
 	public static float[] GenerateLogSpace(int min, int max, int logBins, double logarithmicBase) {
-	       //double logarithmicBase = Math.E;
+	       //double logarithmicBase = Math.E; -base of e default. Enable this 
 	       double logMin = Math.log(min);
 	       double logMax = Math.log(max);
 	       double delta = (logMax - logMin) / logBins;
@@ -40,8 +39,7 @@ public class GenerateClickTrack {
 	       return spacedVals;
 	}
 	
-	
-	//modifies spacedVals field. Python equivalent: np.sin(angular_freq * np.arange(len(spacedVals)))
+	// Modifies the spacedVals field. Multiplies indices in spacedVals by itself and a sine function to create the click sound waveform
 	public void arange() {		
 		for (int i = 0; i < spacedVals.length; i++) {
 			//multiply each index value by the sine of its (index multiplied by angular_freq)
@@ -50,6 +48,7 @@ public class GenerateClickTrack {
 	}
 	
 	// Overloaded Method to generate indices from a given int array of timestamps. 
+	// Default SR 22050
 	public int[] timeToSamples () {
 		for (int i = 0; i < times.length; i++) {
 			times[i] = times[i] * 22050;
@@ -65,28 +64,24 @@ public class GenerateClickTrack {
 		return times;
 	}
 	
+	// Returns an ArrayList of clicks. (unsure: there are no blank zero spaces in my ArrayList.
+	// I am unsure as to how the clicktrack is read - right now the newPositions ArrayList is just
+	// a bunch of click values 
 	public ArrayList<Float> placeClicks (int[] clicks) {
-		int[] positions = timeToSamples();
 		
-		//find max of primitive array
-		//int maxVal = Arrays.stream(positions).max().getAsInt();
-		
-		ArrayList<Float> newPositions = new ArrayList<Float>(); //click_signal
-		
+		int[] positions = timeToSamples();				
+		ArrayList<Float> newPositions = new ArrayList<Float>(); // Click signal array 	
 		int sentinel = positions.length;
+		
 		for (int i = 0; i < sentinel; i++) {
-			
-			int end = i + spacedVals.length;
-			
+			int end = i + spacedVals.length;			
 			if (end >= spacedVals.length) {
-				
 				//placing a click but just shortened to fit length
 				for (int k = 0; k < spacedVals.length - i; k++) {
 					newPositions.add(spacedVals[k]);
 				}
 			} else {				
-				//appending clicks onto the click signal newPositions			
-				//This is not correct. END is END. add AFTER END . DO WE NEED TO MAKE newPOSITIONS and ARRAY OF ZEROS? no. 
+				//appending clicks onto the click signal newPositions		
 				for (int k = 0; k < spacedVals.length; k++) {
 					newPositions.add(spacedVals[k]);
 				}
