@@ -78,6 +78,12 @@ public class GenerateClickTrack {
 			
 			int end = i + spacedVals.length;
 			
+			/ *
+			* Here is my issue. Python: t = [11, 22, 33, 44, 55, 66]
+			*			    s = [1, 2, 3, 4, 5, 6]
+			* t[0:] += s (or the equivalent t += s or t[0:] += s[:6])
+			* t is now: [11, 22, 33, 44, 55, 66, 1, 2, 3, 4, 5, 6]. This doesn't make sense ot me in terms of our newPositions and spacedVals arrays.
+			* /
 			if (end >= spacedVals.length) {
 				//newPositions from [i:] (whole array) gets click[: length - i] concatenated to it
 				//newPositions[i]
