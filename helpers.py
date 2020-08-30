@@ -13,8 +13,11 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
-  
-  inputAudio, sr, newName = convert_file(file, filename, convert_folder)
+  saveFileExt = filename.rsplit('.', 1)[1].lower()
+  saveName = filename
+  if(saveFileExt != "wav"):
+    saveName = filename.rsplit('.', 1)[0].lower() + ".wav"
+  inputAudio, sr, newName = convert_file(file, filename, saveName, convert_folder)
   _, beats = generate_beats(inputAudio, sr)
   x = inputAudio
   x_beats = clicks(
@@ -42,14 +45,12 @@ def generate_click_only(convertedAudio, filename, saveName, click_freq, click_du
             click_freq = click_freq, # frequency of each click (in Hz)
             click_duration = click_duration # duration of each click (in seconds)
           )
-  print(x)
   sf.write(os.path.join(clicks_folder, saveName), x_beats / max(abs(x_beats)), sr)
   return saveName
 
 def generate_beats(inputAudio, sr):
 
   _, beats = beat_track(y = inputAudio, sr = sr)
-  print(inputAudio[:100000])
   return(inputAudio, beats)
 
 def convert_file(file, filename, saveName, convert_folder):
