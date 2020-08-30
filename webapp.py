@@ -1,16 +1,18 @@
-#!flask/bin/python
+#!flask/Scripts/python
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template, make_response, send_file
 from werkzeug.utils import secure_filename
-from helpers import allowed_file, generate_click, generate_beats, convert_file, write
+from helpers import allowed_file, generate_click, generate_beats, convert_file, generate_click_only
 import json
 
 UPLOAD_FOLDER = './upload/'
 CONVERT_FOLDER = './convert/'
+CLICKS_FOLDER = './clicks/'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CONVERT_FOLDER'] = CONVERT_FOLDER
+app.config['CLICKS_FOLDER'] = CLICKS_FOLDER
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -60,11 +62,38 @@ def generate():
   file = request.files['audioFile']
   if file and allowed_file(file.filename):
     converted, sr, newName = convert_file(file, file.filename, app.config['CONVERT_FOLDER'])
-    _, beats = generate_beats(converted, sr)
-    path = write(beats, newName)
-    response = make_response(send_file(path, attachment_filename = "clicks.wav", as_attachment = True))
+    click_freq = 880
+    click_duration = 0.5
+    vol_adj_song = 1
+    vol_adj_click = 1
+    retName = generate_click_only(converted, file.filename, click_freq, click_duration, app.config['CLICKS_FOLDER'])
+    response = make_response(send_file(os.path.join(app.config['CLICKS_FOLDER'], retName), attachment_filename = "clicks.wav", as_attachment = True))
     return response, 200
   else:
     return render_template('badFileType.html'), 400
+
+@app.route('/generateFull', methods = ['POST'])
+def generateFull():
+  if 'audioFile' not in request.files:
+    return render_template("noAudioFile.html"), 400
+  file = request.files['audioFile']
+  if file and allowed_file(file.filename):
+    converted, sr, newName = convert_file(file, file.filename, app.config['CONVERT_FOLDER'])
+    _, beats = generate_beats(converted, sr)
+    ret = {
+      "beats": beats.tolist(),
+      "sr": sr,
+    }
+    response = make_response(send_file(os.path.join(app.config['CONVERT_FOLDER'], newName), attachment_filename = "converted.wav", as_attachment = True))
+    response.headers['X-Beats'] = ret
+    return response, 200
+  else:
+    return render_template('badFileType.html'), 400
+
+
+@app.route('/test', methods = ['POST'])
+def testFun():
+  print(request.params)
+  return render_template('badFileType.html'), 400
 
 app.run(host = "0.0.0.0")

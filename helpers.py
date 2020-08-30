@@ -31,10 +31,25 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
   sf.write(os.path.join(convert_folder, newName), x + x_beats, sr)
   return newName
 
+def generate_click_only(convertedAudio, filename, click_freq, click_duration, clicks_folder):
+  sr = 44100
+  _, beats = generate_beats(convertedAudio, sr)
+  x = convertedAudio
+  x_beats = clicks(
+            frames = beats, # the beats to place clicks
+            sr = sr, # sample rate
+            length = len(x), # length of the song (necessary to align clicktrack and song)
+            click_freq = click_freq, # frequency of each click (in Hz)
+            click_duration = click_duration # duration of each click (in seconds)
+          )
+  print(x)
+  sf.write(os.path.join(clicks_folder, filename), x_beats / max(abs(x_beats)), sr)
+  return filename
+
 def generate_beats(inputAudio, sr):
 
   _, beats = beat_track(y = inputAudio, sr = sr)
-
+  print(inputAudio[:100000])
   return(inputAudio, beats)
 
 def convert_file(file, filename, convert_folder):
@@ -54,9 +69,3 @@ def convert_file(file, filename, convert_folder):
   data = data / np.max(np.abs(data)) 
   
   return(data, sr, newName)
-
-def write(audio, filename):
-  path = os.path.join('clicks', filename)
-  sf.write(filename, audio)
-  
-  return path
