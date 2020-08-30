@@ -113,7 +113,7 @@ def generateTwo():
     retName = generate_click_only(converted, file.filename, hashName + "_clicks.wav", float(click_freq), float(click_dur), app.config['CLICKS_FOLDER'])
 
     response = make_response()
-    response.headers['X-Urls'] = { "convertedPath": newName, "clickPath": retName}
+    response.headers['X-Urls'] = { "key": hashName }
     return response, 200
   else: 
     return render_template('badFileType.html'), 400
