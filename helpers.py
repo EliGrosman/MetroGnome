@@ -54,3 +54,9 @@ def convert_file(file, filename, convert_folder):
   data = data / np.max(np.abs(data)) 
   
   return(data, sr, newName)
+
+def write(audio, filename):
+  path = os.path.join('clicks', filename)
+  sf.write(filename, audio)
+  
+  return path
