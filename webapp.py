@@ -127,4 +127,25 @@ def converted_file(filename):
     elif(ext == "clicks.wav"):
       return send_from_directory(app.config['CLICKS_FOLDER'], filename)
 
+
+@app.route('/generateMixed', methods = ['POST'])
+def generateMixed():
+  if 'audioFile' not in request.files:
+    return render_template("noAudioFile.html"), 400
+  file = request.files['audioFile']
+  if file and allowed_file(file.filename):
+    click_freq = request.args.get("click_freq")
+    click_dur = request.args.get("click_dur")
+
+    if click_freq is None or click_dur is None:
+      return render_template('badFileType.html'), 400
+
+    saveName = generate_click(file, file.filename, float(click_freq), float(click_dur), 1, 1, app.config['CONVERT_FOLDER'])
+    print(saveName)
+    response = make_response(send_file(os.path.join(app.config['CONVERT_FOLDER'], saveName), attachment_filename = "converted.wav", as_attachment = True))
+    return response, 200
+  else:
+    return render_template('badFileType.html'), 400
+
+
 app.run(host = "0.0.0.0")

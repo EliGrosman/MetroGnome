@@ -17,7 +17,8 @@ def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol
   saveName = filename
   if(saveFileExt != "wav"):
     saveName = filename.rsplit('.', 1)[0].lower() + ".wav"
-  inputAudio, sr, newName = convert_file(file, filename, saveName, convert_folder)
+  inputAudio, _, newName = convert_file(file, filename, saveName, convert_folder)
+  sr = 44100
   _, beats = generate_beats(inputAudio, sr)
   x = inputAudio
   x_beats = clicks(
