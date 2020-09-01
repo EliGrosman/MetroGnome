@@ -46,8 +46,7 @@ def upload_file():
 
 @app.route('/generated/<filename>')
 def return_file(filename):
-  return send_from_directory(os.path.join(app.config['CONVERT_FOLDER'], filename))
-
+  return send_from_directory(app.config['CONVERT_FOLDER'], filename)
 
 
 # ---- Endpoint for Android App ----
