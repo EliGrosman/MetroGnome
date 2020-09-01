@@ -14,11 +14,12 @@ def allowed_file(filename):
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
   saveFileExt = filename.rsplit('.', 1)[1].lower()
+  saveName = filename
 
   if(saveFileExt != "wav"):
     saveName = saveName.rsplit('.', 1)[0].lower() + ".wav"
 
-  inputAudio, _, newName = convert_file(file, saveName, saveName, convert_folder)
+  inputAudio, _, newName = convert_file(file, filename, saveName, convert_folder)
   sr = 44100
 
   _, beats = beat_track(inputAudio, sr)
