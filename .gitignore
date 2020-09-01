@@ -1,5 +1,2 @@
-/audio
-/convert/*
-/upload/*
-/flask
+/temp
 /__pycache__
