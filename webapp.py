@@ -2,7 +2,7 @@
 import os
 from flask import Flask, request, redirect, url_for, send_from_directory, jsonify, render_template, make_response, send_file
 from werkzeug.utils import secure_filename
-from helpers import allowed_file, generate_click, generate_beats, convert_file, generate_click_only
+from helpers import allowed_file, generate_click
 import json
 import random
 import string
@@ -67,7 +67,7 @@ def generateFull():
     click_dur = request.args.get("click_dur")
 
     if click_freq is None or click_dur is None:
-      return render_template('badFileType.html'), 400
+      return render_template('error.html'), 400
 
     saveName = generate_click(file, file.filename, float(click_freq), float(click_dur), 1, 1, app.config['CONVERT_FOLDER'])
 

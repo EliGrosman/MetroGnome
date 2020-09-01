@@ -1,5 +1,5 @@
 import os
-from librosa import clicks, load
+from librosa import clicks
 from librosa.beat import beat_track
 import soundfile as sf
 from pydub import AudioSegment
@@ -14,59 +14,48 @@ def allowed_file(filename):
 
 def generate_click(file, filename, click_freq, click_duration, vol_adj_song, vol_adj_click, convert_folder):
   saveFileExt = filename.rsplit('.', 1)[1].lower()
-  saveName = filename
+
   if(saveFileExt != "wav"):
-    saveName = filename.rsplit('.', 1)[0].lower() + ".wav"
-  inputAudio, _, newName = convert_file(file, filename, saveName, convert_folder)
+    saveName = saveName.rsplit('.', 1)[0].lower() + ".wav"
+
+  inputAudio, _, newName = convert_file(file, saveName, saveName, convert_folder)
   sr = 44100
-  _, beats = generate_beats(inputAudio, sr)
-  x = inputAudio
-  x_beats = clicks(
+
+  _, beats = beat_track(inputAudio, sr)
+
+  clickAudio = clicks(
             frames = beats, # the beats to place clicks
             sr = sr, # sample rate
-            length = len(x), # length of the song (necessary to align clicktrack and song)
+            length = len(inputAudio), # length of the song (necessary to align clicktrack and song)
             click_freq = click_freq, # frequency of each click (in Hz)
             click_duration = click_duration # duration of each click (in seconds)
           )
 
-  x *= vol_adj_song
-  x_beats *= vol_adj_click 
+  inputAudio *= vol_adj_song
+  clickAudio *= vol_adj_click 
 
-  sf.write(os.path.join(convert_folder, newName), x + x_beats, sr)
+  sf.write(os.path.join(convert_folder, newName), inputAudio + clickAudio, sr)
   return newName
-
-def generate_click_only(convertedAudio, filename, saveName, click_freq, click_duration, clicks_folder):
-  sr = 44100
-  _, beats = generate_beats(convertedAudio, sr)
-  x = convertedAudio
-  x_beats = clicks(
-            frames = beats, # the beats to place clicks
-            sr = sr, # sample rate
-            length = len(x), # length of the song (necessary to align clicktrack and song)
-            click_freq = click_freq, # frequency of each click (in Hz)
-            click_duration = click_duration # duration of each click (in seconds)
-          )
-  sf.write(os.path.join(clicks_folder, saveName), x_beats / max(abs(x_beats)), sr)
-  return saveName
-
-def generate_beats(inputAudio, sr):
-
-  _, beats = beat_track(y = inputAudio, sr = sr)
-  return(inputAudio, beats)
 
 def convert_file(file, filename, saveName, convert_folder):
   extension = filename.rsplit('.', 1)[1].lower()
+
   if(extension == "mp3"):
     audio = AudioSegment.from_mp3(file)
   elif(extension == "wav"):
     audio = AudioSegment.from_wav(file)
   else:
-    print("broken")
+    audio = AudioSegment.from_file(file, extension)
+
   audio.export(os.path.join(convert_folder, saveName), format = "wav", bitrate = '16k')
+
   sr, data = wav.read(os.path.join(convert_folder, saveName))
-  # Converts to mono to keep file small
+
+  # Converts to mono to keep file small and usable with beat_track
   if len(data.shape) == 2:
     data = data.sum(axis=1) / 2
+
+  # Normalize amplitudes
   data = data / np.max(np.abs(data)) 
   
   return(data, sr, saveName)
